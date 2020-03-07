@@ -6,8 +6,7 @@ import com.oliva.marc.sesion5oruna.model.interactor.impl.MoviesInteractorImpl
 import com.oliva.marc.sesion5oruna.model.repository.firebase.MovieFB
 import com.oliva.marc.sesion5oruna.view.MovieView
 
-class MoviePresenterImpl(val moviesView: MovieView) :
-    MoviePresenter {
+class MoviePresenterImpl(val moviesView: MovieView) : MoviePresenter {
 
     private val movieInteractor: MoviesInteractor =
         MoviesInteractorImpl(
@@ -22,6 +21,14 @@ class MoviePresenterImpl(val moviesView: MovieView) :
         moviesView.showMoviesFB(movies)
     }
 
+    override fun removeMovieFB(key: String) {
+        movieInteractor.removeMovieFB(key)
+    }
+
+    override fun addMovieFB(movie: MovieFB) {
+        movieInteractor.addMoviewFB(movie)
+    }
+
     override fun getMovies() {
         movieInteractor.getMoviesAPI()
     }
@@ -30,8 +37,12 @@ class MoviePresenterImpl(val moviesView: MovieView) :
         movieInteractor.getMoviesFirestore()
     }
 
+    override fun success(msg: String) {
+        moviesView.success(msg)
+    }
+
     override fun error(err: Throwable) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        moviesView.error(err)
     }
 
 }

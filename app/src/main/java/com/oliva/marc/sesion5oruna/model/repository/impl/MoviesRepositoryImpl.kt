@@ -6,6 +6,7 @@ import com.oliva.marc.sesion5oruna.model.Movie
 import com.oliva.marc.sesion5oruna.model.repository.MoviesRepository
 import com.oliva.marc.sesion5oruna.model.repository.api.ReferenceMoviesService
 import com.oliva.marc.sesion5oruna.model.repository.firebase.FirebaseMoviesService
+import com.oliva.marc.sesion5oruna.model.repository.firebase.MovieFB
 import com.oliva.marc.sesion5oruna.presenter.MoviePresenter
 import retrofit2.Call
 import retrofit2.Callback
@@ -43,5 +44,11 @@ class MoviesRepositoryImpl(val moviePresenter: MoviePresenter) :
     }
 
     override fun getMoviesFirestore() = FirebaseMoviesService(moviePresenter).getAllMovies()
+
+    override fun addMovieFirestore(movie: MovieFB) =
+        FirebaseMoviesService(moviePresenter).addMovie(movie)
+
+    override fun removeMovieFirestore(key: String) =
+        FirebaseMoviesService(moviePresenter).deleteMovie(key)
 
 }

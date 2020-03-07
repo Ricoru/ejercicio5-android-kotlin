@@ -6,6 +6,13 @@ import com.oliva.marc.sesion5oruna.model.repository.firebase.MovieFB
 interface MovieView {
     fun showMovies(movies: ArrayList<Movie>?)
     fun showMoviesFB(movies: ArrayList<MovieFB>?)
+
     fun getMovies()
     fun getMoviesFirestore()
+
+    fun success(msg: String)
+    fun error(e: Throwable)
+
+    fun removeMovieFB(key: String)
+
 }

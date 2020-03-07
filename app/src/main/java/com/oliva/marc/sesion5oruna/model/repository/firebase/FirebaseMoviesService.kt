@@ -27,6 +27,7 @@ class FirebaseMoviesService(val moviePresenter: MoviePresenter) : FirebaseMovie 
             .addOnSuccessListener {
                 for (e in it.documents) {
                     val result = e.toObject(MovieFB::class.java)
+                    result?.key = e.id
                     movies.add(result!!)
                 }
                 moviePresenter.showMoviesFB(movies)
@@ -46,10 +47,10 @@ class FirebaseMoviesService(val moviePresenter: MoviePresenter) : FirebaseMovie 
         remoteDB.collection(MOVIES_COLLECTION)
             .add(movieData)
             .addOnSuccessListener {
-
+                moviePresenter.success("Movie added success")
             }
             .addOnFailureListener {
-
+                moviePresenter.error(it)
             }
     }
 
@@ -58,8 +59,10 @@ class FirebaseMoviesService(val moviePresenter: MoviePresenter) : FirebaseMovie 
             .document(movieId)
             .delete()
             .addOnSuccessListener {
+                moviePresenter.success("Movie deleted success")
             }
             .addOnFailureListener {
+                moviePresenter.error(it)
             }
     }
 

@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.oliva.marc.sesion5oruna.R
 import com.oliva.marc.sesion5oruna.model.repository.firebase.MovieFB
+import com.oliva.marc.sesion5oruna.view.MovieView
 import kotlinx.android.synthetic.main.row_item_movie.view.*
 
-class MovieFBRecyclerAdapter(val movies: ArrayList<MovieFB>) :
+class MovieFBRecyclerAdapter(val movies: ArrayList<MovieFB>, val iMoviewView: MovieView) :
     RecyclerView.Adapter<MovieFBRecyclerAdapter.MovieHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
@@ -32,6 +33,7 @@ class MovieFBRecyclerAdapter(val movies: ArrayList<MovieFB>) :
         var nameTextview = itemView.name_textview
         var ratingRatingBar = itemView.rating_ratingbar
         var categoryTextview = itemView.category_textview
+        var deleteImageview = itemView.delete_imageview
 
         fun setDataMovie(movie: MovieFB) {
             nameTextview.text = movie.name
@@ -39,9 +41,13 @@ class MovieFBRecyclerAdapter(val movies: ArrayList<MovieFB>) :
             ratingRatingBar.rating = movie.rating.toFloat()
             pictureImageView.load(movie.picture) {
                 crossfade(true)
-                placeholder(R.drawable.ic_picture_movie)
+                error(R.drawable.ic_no_hay_foto)
+                placeholder(R.drawable.ic_no_hay_foto)
             }
 
+            deleteImageview.setOnClickListener {
+                iMoviewView.removeMovieFB(movie.key)
+            }
         }
     }
 }
