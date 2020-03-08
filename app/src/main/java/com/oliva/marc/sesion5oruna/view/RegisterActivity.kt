@@ -15,7 +15,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        rating_ratingbar.setOnRatingBarChangeListener { ratingBar, fl, b ->
+        rating_ratingbar.setOnRatingBarChangeListener { _, fl, _ ->
             valueRating = fl
         }
 

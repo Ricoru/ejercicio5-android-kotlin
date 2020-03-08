@@ -1,10 +1,20 @@
 package com.oliva.marc.sesion5oruna.model.repository.firebase
 
+import android.app.Application
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.oliva.marc.sesion5oruna.Mvp
+import com.oliva.marc.sesion5oruna.model.repository.db.DBRoomRepository
+import com.oliva.marc.sesion5oruna.model.repository.db.MovieEntity
 import com.oliva.marc.sesion5oruna.presenter.MoviePresenter
 
-class FirebaseMoviesService(val moviePresenter: MoviePresenter) : FirebaseMovie {
+class FirebaseMoviesService(val moviePresenter: MoviePresenter, val application: Application) : FirebaseMovie {
+
+    private var repository: DBRoomRepository? = null
+
+    init {
+        repository = (application as Mvp).getMvpRepository()
+    }
 
     companion object {
         private const val MOVIES_COLLECTION = "movies"
@@ -22,6 +32,7 @@ class FirebaseMoviesService(val moviePresenter: MoviePresenter) : FirebaseMovie 
 
     override fun getAllMovies() {
         val movies = ArrayList<MovieFB>()
+        val moviesEntity = ArrayList<MovieEntity>()
         remoteDB.collection(MOVIES_COLLECTION)
             .get()
             .addOnSuccessListener {
@@ -29,8 +40,22 @@ class FirebaseMoviesService(val moviePresenter: MoviePresenter) : FirebaseMovie 
                     val result = e.toObject(MovieFB::class.java)
                     result?.key = e.id
                     movies.add(result!!)
+
+                    val movieEntity = MovieEntity(
+                        null, result.key, result.name, result.picture,
+                        result.rating, result.category
+                    )
+                    moviesEntity.add(movieEntity)
                 }
-                moviePresenter.showMoviesFB(movies)
+
+                repository?.deleteAll()
+                repository?.addMovies(moviesEntity).let {
+                    if (movies.isEmpty()) {
+                        moviePresenter.getMovies()
+                    } else {
+                        moviePresenter.showMoviesFB(movies)
+                    }
+                }
             }
             .addOnFailureListener {
                 moviePresenter.error(it)

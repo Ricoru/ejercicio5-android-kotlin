@@ -1,16 +1,18 @@
 package com.oliva.marc.sesion5oruna.presenter
 
+import android.app.Application
 import com.oliva.marc.sesion5oruna.model.Movie
 import com.oliva.marc.sesion5oruna.model.interactor.MoviesInteractor
 import com.oliva.marc.sesion5oruna.model.interactor.impl.MoviesInteractorImpl
 import com.oliva.marc.sesion5oruna.model.repository.firebase.MovieFB
 import com.oliva.marc.sesion5oruna.view.MovieView
 
-class MoviePresenterImpl(val moviesView: MovieView) : MoviePresenter {
+class MoviePresenterImpl(val moviesView: MovieView, application: Application) : MoviePresenter {
 
     private val movieInteractor: MoviesInteractor =
         MoviesInteractorImpl(
-            this
+            this,
+            application
         )
 
     override fun showMovies(movies: ArrayList<Movie>?) {

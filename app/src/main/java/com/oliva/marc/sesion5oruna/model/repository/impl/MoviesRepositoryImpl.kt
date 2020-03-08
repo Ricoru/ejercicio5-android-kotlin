@@ -1,5 +1,6 @@
 package com.oliva.marc.sesion5oruna.model.repository.impl
 
+import android.app.Application
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.oliva.marc.sesion5oruna.model.Movie
@@ -12,13 +13,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MoviesRepositoryImpl(val moviePresenter: MoviePresenter) :
+class MoviesRepositoryImpl(val moviePresenter: MoviePresenter, val application : Application) :
     MoviesRepository {
 
     override fun getMoviesAPI() {
         val movies: ArrayList<Movie>? = ArrayList()
-        val apiAdapter =
-            ReferenceMoviesService()
+        val apiAdapter = ReferenceMoviesService()
         val apiService = apiAdapter.getClientService()
         val call = apiService.listMovies()
 
@@ -43,12 +43,12 @@ class MoviesRepositoryImpl(val moviePresenter: MoviePresenter) :
         })
     }
 
-    override fun getMoviesFirestore() = FirebaseMoviesService(moviePresenter).getAllMovies()
+    override fun getMoviesFirestore() = FirebaseMoviesService(moviePresenter, application).getAllMovies()
 
     override fun addMovieFirestore(movie: MovieFB) =
-        FirebaseMoviesService(moviePresenter).addMovie(movie)
+        FirebaseMoviesService(moviePresenter, application).addMovie(movie)
 
     override fun removeMovieFirestore(key: String) =
-        FirebaseMoviesService(moviePresenter).deleteMovie(key)
+        FirebaseMoviesService(moviePresenter, application).deleteMovie(key)
 
 }

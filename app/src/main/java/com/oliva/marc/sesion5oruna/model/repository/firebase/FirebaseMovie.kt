@@ -5,5 +5,4 @@ interface FirebaseMovie {
             //: List<MovieFB>
     fun addMovie(movie: MovieFB)
     fun deleteMovie(movieId: String)
-
 }

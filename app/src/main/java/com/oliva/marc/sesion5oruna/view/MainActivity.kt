@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), MovieView {
 
     fun setUpInstances() {
         moviePresenter =
-            MoviePresenterImpl(this)
+            MoviePresenterImpl(this, application)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -103,14 +103,14 @@ class MainActivity : AppCompatActivity(), MovieView {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_REGISTER_MOVIE) {
             if (resultCode == Activity.RESULT_OK) {
-                val movie = MovieFB()
                 data.let {
-                    movie.name = data!!.getStringExtra("name")
-                    movie.category = data.getStringExtra("category")
+                    val movie = MovieFB()
+                    movie.name = data?.getStringExtra("name")!!
+                    movie.category = data.getStringExtra("category")!!
                     movie.rating = data.getFloatExtra("rating", 0f).toString()
-                    movie.picture = data.getStringExtra("picture")
+                    movie.picture = data.getStringExtra("picture")!!
+                    moviePresenter?.addMovieFB(movie)
                 }
-                moviePresenter?.addMovieFB(movie)
             }
         }
     }
